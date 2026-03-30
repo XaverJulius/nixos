@@ -31,8 +31,8 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
 
-          home-manager.users.yourusername =
-            import ./home/yourusername.nix;
+          home-manager.users.xaver =
+            import ./home/xaver.nix;
         }
       ];
     };

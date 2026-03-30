@@ -11,7 +11,7 @@
     settings.default_session = {
       command =
         "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd Hyprland";
-      user = "yourusername";
+      user = "xaver";
     };
   };
 
