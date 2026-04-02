@@ -4,6 +4,7 @@
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   users.mutableUsers = true;
+  nixpkgs.config.allowUnfree = true;
 
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "en_US.UTF-8";
