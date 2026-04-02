@@ -3,14 +3,14 @@
 {
   programs.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   };
 
   services.greetd = {
     enable = true;
     settings.default_session = {
       command =
-        "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd Hyprland";
+        "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
       user = "greeter";
     };
   };
@@ -23,7 +23,7 @@
   environment.systemPackages = with pkgs; [
     kitty
     waybar
-    rofi-wayland
+    rofi
     dunst
 
     wl-clipboard

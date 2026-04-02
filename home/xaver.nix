@@ -12,8 +12,11 @@
 
   programs.git = {
     enable = true;
-    userName = "Xaver Krudewig";
-    userEmail = "xaver-krudewig@outlook.com";
+    settings = {
+      user.name = "Xaver Krudewig";
+      user.email = "xaver-krudewig@outlook.com";
+    };
+    signing.format = null;
   };
 
   xdg.configFile."hypr/hyprland.conf".text = ''
