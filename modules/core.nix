@@ -34,7 +34,7 @@
   fonts.packages = with pkgs; [
     dejavu_fonts
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
   ];
 
   hardware.graphics.enable = true;
