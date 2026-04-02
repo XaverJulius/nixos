@@ -58,7 +58,7 @@ cd /mnt/etc/nixos
 
 echo "Installing system..."
 
-nixos-install --flake .#nixos
+nixos-install --flake path:/mnt/etc/nixos#nixos
 
 echo
 echo "Setting password for user xaver..."
