@@ -3,6 +3,7 @@
 {
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  users.mutableUsers = true;
 
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -21,6 +22,7 @@
 
   users.users.xaver = {
     isNormalUser = true;
+    initialPassword = "changeme";
     extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
   };
 

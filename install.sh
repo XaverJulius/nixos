@@ -7,6 +7,15 @@ lsblk -d -o NAME,SIZE,MODEL
 echo
 read -e -p "Disk: " DISK
 
+if [[ "$DISK" != /dev/* ]]; then
+  DISK="/dev/$DISK"
+fi
+
+if [[ ! -b "$DISK" ]]; then
+  echo "Disk '$DISK' not found."
+  exit 1
+fi
+
 echo
 read -p "This will ERASE $DISK. Type 'yes' to continue: " confirm
 [ "$confirm" = "yes" ] || exit 1
@@ -18,11 +27,11 @@ parted $DISK -- mkpart ESP fat32 1MiB 512MiB
 parted $DISK -- set 1 esp on
 parted $DISK -- mkpart primary ext4 512MiB 100%
 
-# Handle nvme naming (adds 'p')
+# Handle devices whose partition names include 'p'
 BOOT_PART="${DISK}1"
 ROOT_PART="${DISK}2"
 
-if [[ "$DISK" == *"nvme"* ]]; then
+if [[ "$DISK" == *"nvme"* || "$DISK" == *"mmcblk"* ]]; then
   BOOT_PART="${DISK}p1"
   ROOT_PART="${DISK}p2"
 fi
@@ -50,6 +59,10 @@ cd /mnt/etc/nixos
 echo "Installing system..."
 
 nixos-install --flake .#nixos
+
+echo
+echo "Setting password for user xaver..."
+chroot /mnt /run/current-system/sw/bin/passwd xaver
 
 echo "Done! Rebooting..."
 
