@@ -53,12 +53,16 @@ nixos-generate-config --root /mnt
 
 echo "Copying config..."
 
-cp -r . /mnt/etc/nixos
-cd /mnt/etc/nixos
+install -Dm644 flake.nix /mnt/etc/nixos/flake.nix
+install -Dm644 configuration.nix /mnt/etc/nixos/configuration.nix
+install -Dm755 install.sh /mnt/etc/nixos/install.sh
+install -Dm644 README.md /mnt/etc/nixos/README.md
+cp -rT modules /mnt/etc/nixos/modules
+cp -rT home /mnt/etc/nixos/home
 
 echo "Installing system..."
 
-nixos-install --flake path:/mnt/etc/nixos#nixos
+nixos-install --flake /mnt/etc/nixos#nixos
 
 echo
 echo "Setting password for user xaver..."
