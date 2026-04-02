@@ -57,8 +57,16 @@ install -Dm644 flake.nix /mnt/etc/nixos/flake.nix
 install -Dm644 configuration.nix /mnt/etc/nixos/configuration.nix
 install -Dm755 install.sh /mnt/etc/nixos/install.sh
 install -Dm644 README.md /mnt/etc/nixos/README.md
+if [[ -f flake.lock ]]; then
+  install -Dm644 flake.lock /mnt/etc/nixos/flake.lock
+fi
 cp -rT modules /mnt/etc/nixos/modules
 cp -rT home /mnt/etc/nixos/home
+
+if [[ ! -f /mnt/etc/nixos/flake.lock ]]; then
+  echo "Generating flake.lock..."
+  nix flake lock /mnt/etc/nixos
+fi
 
 echo "Installing system..."
 
