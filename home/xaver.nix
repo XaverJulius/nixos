@@ -26,7 +26,7 @@
     exec-once = dunst
 
     input {
-      kb_layout = us
+      kb_layout = de
     }
 
     bind = SUPER, RETURN, exec, kitty
