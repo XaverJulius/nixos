@@ -65,7 +65,7 @@ cp -rT home /mnt/etc/nixos/home
 
 if [[ ! -f /mnt/etc/nixos/flake.lock ]]; then
   echo "Generating flake.lock..."
-  nix flake lock /mnt/etc/nixos
+  nix --extra-experimental-features "nix-command flakes" flake lock /mnt/etc/nixos
 fi
 
 echo "Installing system..."
