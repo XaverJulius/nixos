@@ -51,6 +51,18 @@ echo "Generating hardware config..."
 
 nixos-generate-config --root /mnt
 
+echo "Creating temporary swapfile for install..."
+
+if command -v fallocate >/dev/null 2>&1; then
+  fallocate -l 8G /mnt/swapfile
+else
+  dd if=/dev/zero of=/mnt/swapfile bs=1M count=8192 status=progress
+fi
+
+chmod 600 /mnt/swapfile
+mkswap /mnt/swapfile
+swapon /mnt/swapfile
+
 echo "Copying config..."
 
 install -Dm644 flake.nix /mnt/etc/nixos/flake.nix
@@ -70,7 +82,7 @@ fi
 
 echo "Installing system..."
 
-nixos-install --flake /mnt/etc/nixos#nixos
+nixos-install --max-jobs 2 --cores 2 --flake /mnt/etc/nixos#nixos
 
 echo
 echo "Setting password for user xaver..."
