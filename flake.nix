@@ -18,11 +18,12 @@
   outputs = { self, nixpkgs, hyprland, home-manager, ... }@inputs:
   let
     system = "x86_64-linux";
+    userSettings = import ./user.nix;
   in {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       inherit system;
 
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs userSettings; };
 
       modules = [
         ./configuration.nix
@@ -33,9 +34,10 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit userSettings; };
 
-          home-manager.users.xaver =
-            import ./home/xaver.nix;
+          home-manager.users.${userSettings.username} =
+            import ./home/user.nix;
         }
       ];
     };

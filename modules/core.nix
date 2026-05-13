@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, userSettings, ... }:
 
 {
   networking.hostName = "nixos";
@@ -20,10 +20,12 @@
     pulse.enable = true;
   };
 
-  users.users.xaver = {
-    isNormalUser = true;
-    initialPassword = "changeme";
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
+  users.users = {
+    ${userSettings.username} = {
+      isNormalUser = true;
+      initialPassword = "changeme";
+      extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
+    };
   };
 
   security.sudo.enable = true;

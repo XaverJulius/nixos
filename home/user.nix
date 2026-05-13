@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, userSettings, ... }:
 
 {
-  home.username = "xaver";
-  home.homeDirectory = "/home/xaver";
+  home.username = userSettings.username;
+  home.homeDirectory = "/home/${userSettings.username}";
 
   home.stateVersion = "24.11";
 
@@ -13,8 +13,8 @@
   programs.git = {
     enable = true;
     settings = {
-      user.name = "Xaver Krudewig";
-      user.email = "xaver-krudewig@outlook.com";
+      user.name = userSettings.name;
+      user.email = userSettings.email;
     };
     signing.format = null;
   };

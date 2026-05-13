@@ -1,6 +1,42 @@
 #!/usr/bin/env bash
 set -e
 
+nix_string() {
+  local value="$1"
+  value="${value//\\/\\\\}"
+  value="${value//\"/\\\"}"
+  printf '"%s"' "$value"
+}
+
+write_user_config() {
+  local target="$1"
+
+  cat > "$target" <<EOF
+{
+  username = $(nix_string "$USERNAME");
+  name = $(nix_string "$USER_NAME");
+  email = $(nix_string "$USER_EMAIL");
+}
+EOF
+}
+
+echo "User settings:"
+read -e -p "Username: " USERNAME
+read -e -p "Full name: " USER_NAME
+read -e -p "Email: " USER_EMAIL
+
+if [[ -z "$USERNAME" || -z "$USER_NAME" || -z "$USER_EMAIL" ]]; then
+  echo "Username, full name, and email are required."
+  exit 1
+fi
+
+if [[ ! "$USERNAME" =~ ^[a-z_][a-z0-9_-]*[$]?$ ]]; then
+  echo "Username '$USERNAME' is not a valid Linux username."
+  exit 1
+fi
+
+echo
+
 echo "Available disks:"
 lsblk -d -o NAME,SIZE,MODEL
 
@@ -66,6 +102,7 @@ swapon /mnt/swapfile
 echo "Copying config..."
 
 install -Dm644 flake.nix /mnt/etc/nixos/flake.nix
+write_user_config /mnt/etc/nixos/user.nix
 install -Dm644 configuration.nix /mnt/etc/nixos/configuration.nix
 install -Dm755 install.sh /mnt/etc/nixos/install.sh
 install -Dm644 README.md /mnt/etc/nixos/README.md
@@ -85,8 +122,8 @@ echo "Installing system..."
 nixos-install --max-jobs 2 --cores 2 --flake /mnt/etc/nixos#nixos
 
 echo
-echo "Setting password for user xaver..."
-chroot /mnt /run/current-system/sw/bin/passwd xaver
+echo "Setting password for user $USERNAME..."
+chroot /mnt /run/current-system/sw/bin/passwd "$USERNAME"
 
 echo "Done! Rebooting..."
 
