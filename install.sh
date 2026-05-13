@@ -20,6 +20,30 @@ write_user_config() {
 EOF
 }
 
+shell_quote() {
+  local value="$1"
+  value="${value//\'/\'\\\'\'}"
+  printf "'%s'" "$value"
+}
+
+set_user_password() {
+  local passwd_path="/nix/var/nix/profiles/system/sw/bin/passwd"
+
+  if [[ -x "/mnt$passwd_path" ]]; then
+    chroot /mnt "$passwd_path" "$USERNAME"
+    return
+  fi
+
+  if command -v nixos-enter >/dev/null 2>&1; then
+    nixos-enter --root /mnt -c "passwd $(shell_quote "$USERNAME")"
+    return
+  fi
+
+  echo "Could not find passwd in the installed system."
+  echo "Boot the system and log in with the initial password 'changeme', then run: passwd"
+  exit 1
+}
+
 echo "User settings:"
 read -e -p "Username: " USERNAME
 read -e -p "Full name: " USER_NAME
@@ -123,7 +147,7 @@ nixos-install --max-jobs 2 --cores 2 --flake /mnt/etc/nixos#nixos
 
 echo
 echo "Setting password for user $USERNAME..."
-chroot /mnt /run/current-system/sw/bin/passwd "$USERNAME"
+set_user_password
 
 echo "Done! Rebooting..."
 
