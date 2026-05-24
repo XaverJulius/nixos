@@ -17,7 +17,11 @@
 
   xdg.portal = {
     enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-hyprland ];
+    configPackages = [ pkgs.hyprland ];
   };
+
+  programs.foot.enable = true;
 
   environment.systemPackages = with pkgs; [
     kitty
@@ -28,5 +32,10 @@
     wl-clipboard
     grim
     slurp
+
+    hypridle
+    hyprlock
+    hyprsunset
+    xdg-desktop-portal-hyprland
   ];
 }

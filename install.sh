@@ -152,3 +152,4 @@ set_user_password
 echo "Done! Rebooting..."
 
 reboot
+

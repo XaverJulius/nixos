@@ -19,19 +19,9 @@
     signing.format = null;
   };
 
-  xdg.configFile."hypr/hyprland.conf".text = ''
-    monitor=,preferred,auto,1
-
-    exec-once = waybar
-    exec-once = dunst
-
-    input {
-      kb_layout = de
-    }
-
-    bind = SUPER, RETURN, exec, kitty
-    bind = SUPER, D, exec, rofi -show drun
-    bind = SUPER, Q, killactive
-    bind = SUPER, M, exit
-  '';
+  xdg.configFile."hypr/hyprland.lua".source = ./hypr/hyprland.lua;
+  xdg.configFile."hypr/hypridle.conf".source = ./hypr/hypridle.conf;
+  xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
+  xdg.configFile."hypr/hyprsunset.conf".source = ./hypr/hyprsunset.conf;
+  xdg.configFile."hypr/xdph.conf".source = ./hypr/xdph.conf;
 }
